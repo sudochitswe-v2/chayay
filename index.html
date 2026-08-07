@@ -1,0 +1,614 @@
+<!DOCTYPE html>
+<html lang="en" class="dark scroll-smooth">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ChaYay (ချရေး) - Fluent Markdown & Text Editor</title>
+    <meta name="description"
+        content="ChaYay (ချရေး) - A lightweight, cross-platform Markdown & text editor built with Flutter and Microsoft Fluent Design. Fast, responsive, and distraction-free across Windows, Linux, and macOS.">
+    <link rel="icon" type="image/png" href="chayay.png">
+    <link rel="apple-touch-icon" href="chayay.png">
+
+    <!-- Google Fonts: Plus Jakarta Sans & JetBrains Mono -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap"
+        rel="stylesheet">
+
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    fontFamily: {
+                        sans: ['"Plus Jakarta Sans"', 'Segoe UI', '-apple-system', 'BlinkMacSystemFont', 'sans-serif'],
+                        mono: ['"JetBrains Mono"', 'Cascadia Code', 'Consolas', 'monospace'],
+                    },
+                    colors: {
+                        fluent: {
+                            blue: '#0078D4',
+                            blueHover: '#106EBE',
+                            blueActive: '#005A9E',
+                            accent: '#0067C0',
+                            bgDark: '#202020',
+                            cardDark: 'rgba(32, 32, 32, 0.75)',
+                            cardLight: 'rgba(255, 255, 255, 0.75)',
+                            borderDark: 'rgba(255, 255, 255, 0.08)',
+                            borderLight: 'rgba(0, 0, 0, 0.08)',
+                            surfaceDark: '#2C2C2C',
+                            surfaceLight: '#F3F3F3',
+                            micaDark: 'rgba(32, 32, 32, 0.85)',
+                        }
+                    },
+                    backdropBlur: {
+                        fluent: '30px',
+                    },
+                    boxShadow: {
+                        fluent: '0 8px 32px 0 rgba(0, 0, 0, 0.36)',
+                        fluentLight: '0 8px 30px rgba(0, 0, 0, 0.08)',
+                        fluentButton: '0 4px 12px rgba(0, 120, 212, 0.35)',
+                    }
+                }
+            }
+        }
+    </script>
+
+    <style>
+        /* Custom Fluent Design System Styles */
+        body {
+            background-color: #1a1a1a;
+            color: #f3f3f3;
+            background-image:
+                radial-gradient(at 0% 0%, rgba(0, 120, 212, 0.15) 0px, transparent 50%),
+                radial-gradient(at 100% 100%, rgba(0, 103, 192, 0.1) 0px, transparent 50%),
+                radial-gradient(at 50% 50%, rgba(20, 20, 20, 1) 0px, rgba(15, 15, 15, 1) 100%);
+            background-attachment: fixed;
+        }
+
+        .mica-card {
+            background: rgba(36, 36, 36, 0.75);
+            backdrop-filter: blur(30px) saturate(125%);
+            -webkit-backdrop-filter: blur(30px) saturate(125%);
+            border: 1px solid rgba(255, 255, 255, 0.09);
+        }
+
+        .mica-card-interactive {
+            transition: all 0.2s cubic-bezier(0.1, 0.9, 0.2, 1);
+        }
+
+        .mica-card-interactive:hover {
+            background: rgba(45, 45, 45, 0.85);
+            border-color: rgba(255, 255, 255, 0.18);
+            transform: translateY(-2px);
+            box-shadow: 0 12px 28px rgba(0, 0, 0, 0.4);
+        }
+
+        /* Custom Scrollbar */
+        ::-webkit-scrollbar {
+            width: 8px;
+            height: 8px;
+        }
+
+        ::-webkit-scrollbar-track {
+            background: rgba(0, 0, 0, 0.2);
+        }
+
+        ::-webkit-scrollbar-thumb {
+            background: rgba(255, 255, 255, 0.2);
+            border-radius: 4px;
+        }
+
+        ::-webkit-scrollbar-thumb:hover {
+            background: rgba(255, 255, 255, 0.35);
+        }
+    </style>
+</head>
+
+<body
+    class="font-sans antialiased min-h-screen flex flex-col justify-between selection:bg-fluent-blue selection:text-white">
+
+    <!-- Header Navigation -->
+    <header class="sticky top-0 z-50 mica-card border-b border-white/10 px-6 py-3.5 backdrop-blur-md">
+        <div class="max-w-7xl mx-auto flex items-center justify-between">
+            <!-- Brand Logo -->
+            <a href="#" class="flex items-center gap-3 group">
+                <img src="chayay.png" alt="ChaYay Logo"
+                    class="w-9 h-9 object-contain group-hover:scale-105 transition-transform duration-200">
+                <div class="flex items-baseline gap-2">
+                    <span
+                        class="text-xl font-bold tracking-tight text-white group-hover:text-blue-400 transition-colors">ChaYay</span>
+                    <span class="text-sm font-medium text-blue-400/90 font-mono">ချရေး</span>
+                    <span
+                        class="ml-1.5 px-2 py-0.5 text-xs font-semibold rounded-full bg-blue-500/20 text-blue-300 border border-blue-500/30">v0.2.6</span>
+                </div>
+            </a>
+
+            <!-- Navigation Links -->
+            <nav class="hidden md:flex items-center gap-1">
+                <a href="#preview"
+                    class="px-4 py-2 rounded-lg text-sm font-medium text-gray-300 hover:text-white hover:bg-white/5 transition-all">Preview</a>
+                <a href="#features"
+                    class="px-4 py-2 rounded-lg text-sm font-medium text-gray-300 hover:text-white hover:bg-white/5 transition-all">Features</a>
+                <a href="#shortcuts"
+                    class="px-4 py-2 rounded-lg text-sm font-medium text-gray-300 hover:text-white hover:bg-white/5 transition-all">Shortcuts</a>
+            </nav>
+
+            <!-- External Links -->
+            <div class="flex items-center gap-3">
+                <a href="https://github.com/sudochitswe-v2/chayay" target="_blank" rel="noopener noreferrer"
+                    class="p-2 rounded-lg text-gray-400 hover:text-white hover:bg-white/10 transition-colors"
+                    title="GitHub Repository">
+                    <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 24 24">
+                        <path fill-rule="evenodd" clip-rule="evenodd"
+                            d="M12 2C6.477 2 2 6.484 2 12.017c0 4.425 2.865 8.18 6.839 9.504.5.092.682-.217.682-.483 0-.237-.008-.868-.013-1.703-2.782.605-3.369-1.343-3.369-1.343-.454-1.158-1.11-1.466-1.11-1.466-.908-.62.069-.608.069-.608 1.003.07 1.53 1.032 1.53 1.032.892 1.53 2.341 1.088 2.91.832.092-.647.35-1.088.636-1.338-2.22-.253-4.555-1.113-4.555-4.951 0-1.093.39-1.988 1.029-2.688-.103-.253-.446-1.272.098-2.65 0 0 .84-.27 2.75 1.026A9.564 9.564 0 0112 6.844c.85.004 1.705.115 2.504.337 1.909-1.296 2.747-1.027 2.747-1.027.546 1.379.202 2.398.1 2.651.64.7 1.028 1.595 1.028 2.688 0 3.848-2.339 4.695-4.566 4.943.359.309.678.92.678 1.855 0 1.338-.012 2.419-.012 2.747 0 .268.18.58.688.482A10.019 10.019 0 0022 12.017C22 6.484 17.522 2 12 2z" />
+                    </svg>
+                </a>
+                <a href="#download"
+                    class="hidden sm:inline-flex items-center gap-2 px-4 py-2 rounded-lg bg-fluent-blue hover:bg-fluent-blueHover text-white font-medium text-sm transition-all shadow-fluentButton hover:shadow-lg hover:shadow-blue-500/20 active:scale-[0.98]">
+                    <span>Download</span>
+                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                            d="M19 14l-7 7m0 0l-7-7m7 7V3" />
+                    </svg>
+                </a>
+            </div>
+        </div>
+    </header>
+
+    <!-- Main Content Container -->
+    <main class="flex-grow">
+
+        <!-- Hero Section -->
+        <section id="download" class="relative pt-16 pb-20 px-6">
+            <!-- Background Glow Effects -->
+            <div
+                class="absolute top-1/4 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[350px] bg-blue-600/20 blur-[130px] rounded-full pointer-events-none -z-10">
+            </div>
+
+            <div class="max-w-4xl mx-auto text-center space-y-6">
+                <!-- App Hero Logo -->
+                <div class="flex justify-center">
+                    <img src="chayay.png" alt="ChaYay Application Logo"
+                        class="w-20 h-20 sm:w-24 sm:h-24 object-contain filter drop-shadow-[0_10px_25px_rgba(0,120,212,0.45)] hover:scale-105 transition-transform duration-300">
+                </div>
+
+                <!-- Badge -->
+                <div
+                    class="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full mica-card text-xs font-semibold text-blue-300 border border-blue-500/30 tracking-wide uppercase">
+                    <span class="w-2 h-2 rounded-full bg-blue-400 animate-pulse"></span>
+                    <span>Lightweight • Cross-Platform • Markdown Editor</span>
+                </div>
+
+                <!-- Hero Heading -->
+                <h1 class="text-4xl sm:text-6xl font-extrabold tracking-tight text-white leading-[1.15]">
+                    Distraction-Free Writing.<br />
+                    <span
+                        class="bg-clip-text text-transparent bg-gradient-to-r from-blue-400 via-sky-300 to-indigo-300">
+                        Lightweight Cross-Platform Markdown Editor.
+                    </span>
+                </h1>
+
+                <!-- Subheading -->
+                <p class="text-lg sm:text-xl text-gray-300 max-w-2xl mx-auto font-normal leading-relaxed">
+                    <strong class="text-white">ChaYay (ချရေး)</strong> is a lightweight, cross-platform Markdown & text
+                    editor designed with Microsoft's Fluent UI system. Built natively with Flutter to deliver fast,
+                    distraction-free writing on Windows, Linux, and macOS.
+                </p>
+
+                <!-- Smart Download Button & Dropdown Switcher -->
+                <div class="pt-4 flex flex-col items-center gap-4">
+                    <div class="relative group inline-flex flex-col sm:flex-row items-center gap-3">
+                        <!-- Primary Download Button (Populated via JS based on OS or selection) -->
+                        <a id="primary-download-btn"
+                            href="https://github.com/sudochitswe-v2/chayay/releases/download/0.2.6/ChaYay-x86_64-Linux.AppImage"
+                            class="w-full sm:w-auto min-w-[280px] inline-flex items-center justify-center gap-3 px-8 py-4 rounded-xl bg-gradient-to-r from-blue-600 to-fluent-blue hover:from-blue-500 hover:to-fluent-blueHover text-white font-semibold text-base transition-all shadow-fluentButton hover:shadow-xl hover:shadow-blue-500/25 active:scale-[0.98] border border-blue-400/30">
+                            <span id="primary-download-icon" class="flex-shrink-0">
+                                <svg class="w-6 h-6" fill="currentColor" viewBox="0 0 24 24">
+                                    <path
+                                        d="M0 3.449L9.75 2.1v9.451H0m10.949-9.602L24 0v11.4H10.949M0 12.6h9.75v9.451L0 20.699M10.949 12.6H24V24l-13.051-1.8" />
+                                </svg>
+                            </span>
+                            <div class="text-left leading-tight">
+                                <div id="primary-download-label" class="text-base font-bold">Download for Windows (x64)
+                                </div>
+                                <div id="primary-download-subtext" class="text-xs text-blue-100/80 font-normal">v0.2.6 •
+                                    Setup Installer (.exe)</div>
+                            </div>
+                        </a>
+
+                        <!-- Platform Switcher Dropdown Button -->
+                        <div class="relative">
+                            <button id="dropdown-toggle" onclick="toggleDropdown()"
+                                class="px-3.5 py-4 rounded-xl mica-card hover:bg-white/10 text-gray-300 hover:text-white transition-colors flex items-center justify-center border border-white/10"
+                                title="Choose another platform">
+                                <svg class="w-5 h-5 transform transition-transform duration-200" id="dropdown-arrow"
+                                    fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                        d="M19 9l-7 7-7-7" />
+                                </svg>
+                            </button>
+
+                            <!-- Dropdown Menu -->
+                            <div id="platform-dropdown"
+                                class="hidden absolute right-0 top-full mt-2 w-64 mica-card rounded-xl shadow-2xl z-50 p-2 border border-white/20 bg-slate-900/95 backdrop-blur-2xl">
+                                <div
+                                    class="text-[11px] font-semibold text-gray-400 px-3 py-1.5 uppercase tracking-wider">
+                                    Choose Platform</div>
+
+                                <button onclick="selectPlatform('windows')"
+                                    class="w-full flex items-center gap-3 px-3 py-2.5 rounded-lg hover:bg-blue-600/20 text-sm text-gray-200 hover:text-white transition-colors text-left">
+                                    <svg class="w-4 h-4 text-blue-400 flex-shrink-0" fill="currentColor"
+                                        viewBox="0 0 24 24">
+                                        <path
+                                            d="M0 3.449L9.75 2.1v9.451H0m10.949-9.602L24 0v11.4H10.949M0 12.6h9.75v9.451L0 20.699M10.949 12.6H24V24l-13.051-1.8" />
+                                    </svg>
+                                    <div>
+                                        <div class="font-medium">Windows (x64)</div>
+                                        <div class="text-xs text-gray-400">Portable .zip archive</div>
+                                    </div>
+                                </button>
+
+                                <button onclick="selectPlatform('linux')"
+                                    class="w-full flex items-center gap-3 px-3 py-2.5 rounded-lg hover:bg-blue-600/20 text-sm text-gray-200 hover:text-white transition-colors text-left">
+                                    <svg class="w-4 h-4 text-emerald-400 flex-shrink-0" fill="currentColor"
+                                        viewBox="0 0 24 24">
+                                        <path
+                                            d="M12.001 2C6.476 2 2 6.477 2 12c0 4.418 2.865 8.166 6.839 9.489.5.092.682-.217.682-.482 0-.237-.008-.866-.013-1.7-2.782.603-3.369-1.34-3.369-1.34-.454-1.156-1.11-1.464-1.11-1.464-.908-.62.069-.608.069-.608 1.003.07 1.53 1.03 1.53 1.03.892 1.529 2.341 1.087 2.91.831.092-.646.35-1.086.636-1.336-2.22-.253-4.555-1.11-4.555-4.943 0-1.091.39-1.984 1.029-2.683-.103-.253-.446-1.27.098-2.647 0 0 .84-.269 2.75 1.025A9.578 9.578 0 0112 6.836c.85.004 1.705.114 2.504.336 1.909-1.294 2.747-1.025 2.747-1.025.546 1.377.203 2.394.1 2.647.64.699 1.028 1.592 1.028 2.683 0 3.842-2.339 4.687-4.566 4.935.359.309.678.919.678 1.852 0 1.336-.012 2.415-.012 2.743 0 .267.18.578.688.48C19.138 20.163 22 16.418 22 12c0-5.523-4.477-10-9.999-10z" />
+                                    </svg>
+                                    <div>
+                                        <div class="font-medium">Linux (x64)</div>
+                                        <div class="text-xs text-gray-400">Standalone AppImage</div>
+                                    </div>
+                                </button>
+
+                                <button onclick="selectPlatform('mac')"
+                                    class="w-full flex items-center gap-3 px-3 py-2.5 rounded-lg hover:bg-blue-600/20 text-sm text-gray-200 hover:text-white transition-colors text-left">
+                                    <svg class="w-4 h-4 text-purple-400 flex-shrink-0" fill="currentColor"
+                                        viewBox="0 0 24 24">
+                                        <path
+                                            d="M18.71 19.5c-.83 1.24-1.71 2.45-3.05 2.47-1.34.03-1.77-.79-3.29-.79-1.53 0-2 .77-3.27.82-1.31.05-2.3-1.32-3.14-2.53C4.25 17 2.94 12.45 4.7 9.39c.87-1.52 2.43-2.48 4.12-2.51 1.28-.02 2.5.87 3.29.87.78 0 2.26-1.07 3.81-.91.65.03 2.47.26 3.64 1.98-.09.06-2.17 1.28-2.15 3.81.03 3.02 2.65 4.03 2.68 4.04-.03.07-.42 1.44-1.38 2.83M15.97 4.31c.64-.78 1.08-1.85.96-2.93-.93.04-2.09.62-2.75 1.4-.59.68-1.1 1.77-.96 2.84 1.04.08 2.12-.53 2.75-1.31z" />
+                                    </svg>
+                                    <div>
+                                        <div class="font-medium">macOS</div>
+                                        <div class="text-xs text-gray-400">GitHub Release Assets</div>
+                                    </div>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- OS Detection Status Info -->
+                    <div id="detected-os-text" class="text-xs text-gray-400 flex items-center gap-2">
+                        <svg class="w-4 h-4 text-emerald-400 flex-shrink-0" fill="none" stroke="currentColor"
+                            viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" />
+                        </svg>
+                        <span>Detected system: <strong id="detected-os-name" class="text-gray-200">Windows</strong>.
+                            System requirements: Windows 10/11 (64-bit)</span>
+                    </div>
+                </div>
+
+            </div>
+        </section>
+
+        <!-- Preview Section -->
+        <section id="preview" class="py-12 px-6 max-w-7xl mx-auto">
+            <div class="text-center space-y-3 mb-10">
+                <h2 class="text-3xl font-bold text-white tracking-tight">Experience Fluent Design</h2>
+                <p class="text-gray-400 max-w-xl mx-auto">Explore ChaYay's crisp typography, dark mode acrylic
+                    interface, and distraction-free writing environment.</p>
+            </div>
+
+            <!-- Single Preview Image Container -->
+            <div
+                class="relative mica-card rounded-2xl p-2 sm:p-4 shadow-fluent overflow-hidden border border-white/10 group">
+                <!-- Fluent Window Header -->
+                <div
+                    class="flex items-center justify-between px-4 py-2.5 bg-black/40 rounded-t-xl border-b border-white/10 mb-2">
+                    <div class="flex items-center gap-2">
+                        <div class="w-3 h-3 rounded-full bg-red-500/80"></div>
+                        <div class="w-3 h-3 rounded-full bg-yellow-500/80"></div>
+                        <div class="w-3 h-3 rounded-full bg-green-500/80"></div>
+                        <span class="ml-3 text-xs font-mono text-gray-400">ChaYay - Desktop Editor Preview</span>
+                    </div>
+                    <div
+                        class="text-xs text-blue-400 bg-blue-500/10 px-2.5 py-1 rounded border border-blue-500/20 font-medium">
+                        Click image to view full size
+                    </div>
+                </div>
+
+                <!-- Single Preview Image -->
+                <a href="preview.png" target="_blank" class="block relative rounded-xl overflow-hidden cursor-zoom-in">
+                    <img src="preview.png" alt="ChaYay Application Preview"
+                        class="w-full h-auto object-cover rounded-xl transition-transform duration-300 group-hover:scale-[1.005]">
+                </a>
+            </div>
+        </section>
+
+        <!-- Features Grid Section -->
+        <section id="features" class="py-16 px-6 max-w-7xl mx-auto">
+            <div class="text-center space-y-3 mb-14">
+                <h2 class="text-3xl font-bold text-white tracking-tight">Built for Writers & Developers</h2>
+                <p class="text-gray-400 max-w-2xl mx-auto">Everything you need for seamless text editing without the
+                    memory overhead of web browsers disguised as desktop apps.</p>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                <!-- Feature 1 -->
+                <div class="mica-card mica-card-interactive p-6 rounded-2xl">
+                    <div
+                        class="w-12 h-12 rounded-xl bg-blue-500/10 border border-blue-500/20 text-blue-400 flex items-center justify-center mb-5">
+                        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                d="M13 10V3L4 14h7v7l9-11h-7z" />
+                        </svg>
+                    </div>
+                    <h3 class="text-lg font-bold text-white mb-2">Native Desktop Speed</h3>
+                    <p class="text-sm text-gray-300 leading-relaxed">
+                        Compiled natively with Flutter C++ desktop runner. Launches in under a second with minimal RAM
+                        consumption compared to Electron.
+                    </p>
+                </div>
+
+                <!-- Feature 2 -->
+                <div class="mica-card mica-card-interactive p-6 rounded-2xl">
+                    <div
+                        class="w-12 h-12 rounded-xl bg-sky-500/10 border border-sky-500/20 text-sky-400 flex items-center justify-center mb-5">
+                        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                d="M7 21a4 4 0 01-4-4V5a2 2 0 012-2h4a2 2 0 012 2v12a4 4 0 01-4 4zm0 0h12a2 2 0 002-2v-4a2 2 0 00-2-2h-2.343M11 7.343l1.657-1.657a2 2 0 012.828 0l2.829 2.829a2 2 0 010 2.828l-8.486 8.485M7 17h.01" />
+                        </svg>
+                    </div>
+                    <h3 class="text-lg font-bold text-white mb-2">Fluent UI & Acrylic Design</h3>
+                    <p class="text-sm text-gray-300 leading-relaxed">
+                        Designed adhering to Microsoft Fluent UI guidelines. Features dark mode, translucent Mica
+                        backgrounds, and clean control elements.
+                    </p>
+                </div>
+
+                <!-- Feature 3 -->
+                <div class="mica-card mica-card-interactive p-6 rounded-2xl">
+                    <div
+                        class="w-12 h-12 rounded-xl bg-indigo-500/10 border border-indigo-500/20 text-indigo-400 flex items-center justify-center mb-5">
+                        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                d="M7 21h10a2 2 0 002-2V9.414a1 1 0 00-.293-.707l-5.414-5.414A1 1 0 0012.586 3H7a2 2 0 00-2 2v14a2 2 0 002 2z" />
+                        </svg>
+                    </div>
+                    <h3 class="text-lg font-bold text-white mb-2">PDF Export & Script Shaping</h3>
+                    <p class="text-sm text-gray-300 leading-relaxed">
+                        Export Markdown notes to clean PDF documents with precise typography formatting, including
+                        complex script shaping (HarfBuzz-backed Myanmar rendering).
+                    </p>
+                </div>
+
+                <!-- Feature 4 -->
+                <div class="mica-card mica-card-interactive p-6 rounded-2xl">
+                    <div
+                        class="w-12 h-12 rounded-xl bg-purple-500/10 border border-purple-500/20 text-purple-400 flex items-center justify-center mb-5">
+                        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                d="M3 7v10a2 2 0 002 2h14a2 2 0 002-2V9a2 2 0 00-2-2h-6l-2-2H5a2 2 0 00-2 2z" />
+                        </svg>
+                    </div>
+                    <h3 class="text-lg font-bold text-white mb-2">Natural File Explorer</h3>
+                    <p class="text-sm text-gray-300 leading-relaxed">
+                        Built-in sidebar file workspace with natural numerical sorting algorithm, inline renaming
+                        (`F2`), and context menu file operations.
+                    </p>
+                </div>
+
+                <!-- Feature 5 -->
+                <div class="mica-card mica-card-interactive p-6 rounded-2xl">
+                    <div
+                        class="w-12 h-12 rounded-xl bg-emerald-500/10 border border-emerald-500/20 text-emerald-400 flex items-center justify-center mb-5">
+                        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                d="M9.75 17L9 20l-1 1h8l-1-1-.75-3M3 13h18M5 17h14a2 2 0 002-2V5a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
+                        </svg>
+                    </div>
+                    <h3 class="text-lg font-bold text-white mb-2">Cross-Platform Ready</h3>
+                    <p class="text-sm text-gray-300 leading-relaxed">
+                        Optimized for Windows 10/11 with active development for Linux desktop (KDE/GNOME) and native
+                        menubar bridges.
+                    </p>
+                </div>
+
+                <!-- Feature 6 -->
+                <div class="mica-card mica-card-interactive p-6 rounded-2xl">
+                    <div
+                        class="w-12 h-12 rounded-xl bg-amber-500/10 border border-amber-500/20 text-amber-400 flex items-center justify-center mb-5">
+                        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z" />
+                        </svg>
+                    </div>
+                    <h3 class="text-lg font-bold text-white mb-2">Private & Local-First</h3>
+                    <p class="text-sm text-gray-300 leading-relaxed">
+                        Your files stay entirely on your local hard drive. Zero telemetry, zero cloud lock-in, and
+                        instant opening of local text files.
+                    </p>
+                </div>
+            </div>
+        </section>
+
+        <!-- Keyboard Shortcuts Section -->
+        <section id="shortcuts" class="py-16 px-6 max-w-4xl mx-auto">
+            <div class="mica-card rounded-2xl p-8 border border-white/10 shadow-fluent">
+                <div class="flex items-center gap-3 mb-6">
+                    <div class="p-2.5 rounded-xl bg-blue-500/20 text-blue-400 border border-blue-500/30">
+                        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                d="M15 15l-2 5L9 9l11 4-5 2zm0 0l5 5M7.188 2.239l.777 2.897M5.136 7.965l-2.898-.777M13.95 4.05l-2.122 2.122m-5.657 5.656l-2.12 2.122" />
+                        </svg>
+                    </div>
+                    <div>
+                        <h2 class="text-2xl font-bold text-white">Accelerator Keys Cheatsheet</h2>
+                        <p class="text-sm text-gray-400">Boost your editing speed with native global keyboard shortcuts
+                        </p>
+                    </div>
+                </div>
+
+                <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                    <div class="flex items-center justify-between p-3.5 rounded-xl bg-white/5 border border-white/5">
+                        <span class="text-sm font-medium text-gray-300">Create new tab</span>
+                        <kbd
+                            class="px-2.5 py-1 text-xs font-mono font-semibold text-blue-300 bg-blue-950/60 border border-blue-500/30 rounded-lg shadow-sm">Ctrl
+                            + N</kbd>
+                    </div>
+                    <div class="flex items-center justify-between p-3.5 rounded-xl bg-white/5 border border-white/5">
+                        <span class="text-sm font-medium text-gray-300">Save current tab</span>
+                        <kbd
+                            class="px-2.5 py-1 text-xs font-mono font-semibold text-blue-300 bg-blue-950/60 border border-blue-500/30 rounded-lg shadow-sm">Ctrl
+                            + S</kbd>
+                    </div>
+                    <div class="flex items-center justify-between p-3.5 rounded-xl bg-white/5 border border-white/5">
+                        <span class="text-sm font-medium text-gray-300">Close active tab</span>
+                        <kbd
+                            class="px-2.5 py-1 text-xs font-mono font-semibold text-blue-300 bg-blue-950/60 border border-blue-500/30 rounded-lg shadow-sm">Ctrl
+                            + W</kbd>
+                    </div>
+                    <div class="flex items-center justify-between p-3.5 rounded-xl bg-white/5 border border-white/5">
+                        <span class="text-sm font-medium text-gray-300">Export Markdown to PDF</span>
+                        <kbd
+                            class="px-2.5 py-1 text-xs font-mono font-semibold text-blue-300 bg-blue-950/60 border border-blue-500/30 rounded-lg shadow-sm">Ctrl
+                            + P</kbd>
+                    </div>
+                    <div class="flex items-center justify-between p-3.5 rounded-xl bg-white/5 border border-white/5">
+                        <span class="text-sm font-medium text-gray-300">Rename selected file/folder</span>
+                        <kbd
+                            class="px-2.5 py-1 text-xs font-mono font-semibold text-blue-300 bg-blue-950/60 border border-blue-500/30 rounded-lg shadow-sm">F2</kbd>
+                    </div>
+                    <div class="flex items-center justify-between p-3.5 rounded-xl bg-white/5 border border-white/5">
+                        <span class="text-sm font-medium text-gray-300">Delete file/folder</span>
+                        <kbd
+                            class="px-2.5 py-1 text-xs font-mono font-semibold text-blue-300 bg-blue-950/60 border border-blue-500/30 rounded-lg shadow-sm">Delete</kbd>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+    </main>
+
+    <!-- Footer -->
+    <footer class="mica-card border-t border-white/10 px-6 py-8 backdrop-blur-md mt-16">
+        <div class="max-w-7xl mx-auto flex flex-col sm:flex-row items-center justify-between gap-4">
+            <div class="flex items-center gap-3">
+                <img src="chayay.png" alt="ChaYay Logo" class="w-7 h-7 object-contain">
+                <span class="text-sm font-semibold text-gray-300">ChaYay (ချရေး)</span>
+                <span class="text-xs text-gray-500 font-mono">v0.2.6 Release</span>
+            </div>
+            <p class="text-xs text-gray-400 text-center sm:text-left">
+
+            </p>
+            <div class="flex items-center gap-4 text-xs text-gray-400">
+                <a href="#download" class="hover:text-white transition-colors">Download</a>
+                <span>•</span>
+                <a href="#features" class="hover:text-white transition-colors">Features</a>
+                <span>•</span>
+                <a href="#shortcuts" class="hover:text-white transition-colors">Shortcuts</a>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Script for OS Detection & Dropdown Switcher -->
+    <script>
+        const platforms = {
+            windows: {
+                id: 'windows',
+                name: 'Windows',
+                label: 'Download for Windows (x64)',
+                subtext: 'v0.2.6 • Portable Zip (.zip)',
+                url: 'https://github.com/sudochitswe-v2/chayay/releases/download/0.2.6/ChaYay-x86_64-Win.zip',
+                requirements: 'Windows 10 or 11 (64-bit)',
+                icon: `<svg class="w-6 h-6" fill="currentColor" viewBox="0 0 24 24"><path d="M0 3.449L9.75 2.1v9.451H0m10.949-9.602L24 0v11.4H10.949M0 12.6h9.75v9.451L0 20.699M10.949 12.6H24V24l-13.051-1.8"/></svg>`
+            },
+            linux: {
+                id: 'linux',
+                name: 'Linux',
+                label: 'Download for Linux (x64)',
+                subtext: 'v0.2.6 • AppImage Standalone',
+                url: 'https://github.com/sudochitswe-v2/chayay/releases/download/0.2.6/ChaYay-x86_64-Linux.AppImage',
+                requirements: 'Ubuntu 20.04+, Fedora, Arch Linux',
+                icon: `<svg class="w-6 h-6" fill="currentColor" viewBox="0 0 24 24"><path d="M12.001 2C6.476 2 2 6.477 2 12c0 4.418 2.865 8.166 6.839 9.489.5.092.682-.217.682-.482 0-.237-.008-.866-.013-1.7-2.782.603-3.369-1.34-3.369-1.34-.454-1.156-1.11-1.464-1.11-1.464-.908-.62.069-.608.069-.608 1.003.07 1.53 1.03 1.53 1.03.892 1.529 2.341 1.087 2.91.831.092-.646.35-1.086.636-1.336-2.22-.253-4.555-1.11-4.555-4.943 0-1.091.39-1.984 1.029-2.683-.103-.253-.446-1.27.098-2.647 0 0 .84-.269 2.75 1.025A9.578 9.578 0 0112 6.836c.85.004 1.705.114 2.504.336 1.909-1.294 2.747-1.025 2.747-1.025.546 1.377.203 2.394.1 2.647.64.699 1.028 1.592 1.028 2.683 0 3.842-2.339 4.687-4.566 4.935.359.309.678.919.678 1.852 0 1.336-.012 2.415-.012 2.743 0 .267.18.578.688.48C19.138 20.163 22 16.418 22 12c0-5.523-4.477-10-9.999-10z"/></svg>`
+            },
+            mac: {
+                id: 'mac',
+                name: 'macOS',
+                label: 'View All GitHub Releases',
+                subtext: 'v0.2.6 • Release Assets',
+                url: 'https://github.com/sudochitswe-v2/chayay/releases/tag/0.2.6',
+                requirements: 'macOS 11.0 Big Sur or newer',
+                icon: `<svg class="w-6 h-6" fill="currentColor" viewBox="0 0 24 24"><path d="M18.71 19.5c-.83 1.24-1.71 2.45-3.05 2.47-1.34.03-1.77-.79-3.29-.79-1.53 0-2 .77-3.27.82-1.31.05-2.3-1.32-3.14-2.53C4.25 17 2.94 12.45 4.7 9.39c.87-1.52 2.43-2.48 4.12-2.51 1.28-.02 2.5.87 3.29.87.78 0 2.26-1.07 3.81-.91.65.03 2.47.26 3.64 1.98-.09.06-2.17 1.28-2.15 3.81.03 3.02 2.65 4.03 2.68 4.04-.03.07-.42 1.44-1.38 2.83M15.97 4.31c.64-.78 1.08-1.85.96-2.93-.93.04-2.09.62-2.75 1.4-.59.68-1.1 1.77-.96 2.84 1.04.08 2.12-.53 2.75-1.31z"/></svg>`
+            }
+        };
+
+        function detectOSKey() {
+            const userAgent = window.navigator.userAgent.toLowerCase();
+            const platform = (window.navigator.platform || '').toLowerCase();
+            if (platform.includes('win') || userAgent.includes('windows')) return 'windows';
+            if (platform.includes('linux') || userAgent.includes('linux') || userAgent.includes('x11')) return 'linux';
+            if (platform.includes('mac') || userAgent.includes('macintosh') || userAgent.includes('mac os')) return 'mac';
+            return 'windows';
+        }
+
+        function updateDownloadUI(osKey, isManual = false) {
+            const os = platforms[osKey] || platforms.windows;
+            const btn = document.getElementById('primary-download-btn');
+            const iconContainer = document.getElementById('primary-download-icon');
+            const labelEl = document.getElementById('primary-download-label');
+            const subtextEl = document.getElementById('primary-download-subtext');
+            const osTextContainer = document.getElementById('detected-os-text');
+
+            if (btn && os) {
+                btn.href = os.url;
+                if (iconContainer) iconContainer.innerHTML = os.icon;
+                if (labelEl) labelEl.textContent = os.label;
+                if (subtextEl) subtextEl.textContent = os.subtext;
+
+                if (osTextContainer) {
+                    const prefix = isManual ? 'Selected platform:' : 'Detected system:';
+                    osTextContainer.innerHTML = `<svg class="w-4 h-4 text-emerald-400 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/></svg> <span>${prefix} <strong class="text-gray-200">${os.name}</strong>. System requirements: ${os.requirements}</span>`;
+                }
+            }
+        }
+
+        function selectPlatform(osKey) {
+            updateDownloadUI(osKey, true);
+            const menu = document.getElementById('platform-dropdown');
+            const arrow = document.getElementById('dropdown-arrow');
+            if (menu) menu.classList.add('hidden');
+            if (arrow) arrow.classList.remove('rotate-180');
+        }
+
+        function toggleDropdown() {
+            const menu = document.getElementById('platform-dropdown');
+            const arrow = document.getElementById('dropdown-arrow');
+            if (menu) {
+                menu.classList.toggle('hidden');
+                if (arrow) arrow.classList.toggle('rotate-180');
+            }
+        }
+
+        window.addEventListener('click', (e) => {
+            const dropdown = document.getElementById('platform-dropdown');
+            const toggleBtn = document.getElementById('dropdown-toggle');
+            if (dropdown && toggleBtn && !toggleBtn.contains(e.target) && !dropdown.contains(e.target)) {
+                dropdown.classList.add('hidden');
+                const arrow = document.getElementById('dropdown-arrow');
+                if (arrow) arrow.classList.remove('rotate-180');
+            }
+        });
+
+        document.addEventListener('DOMContentLoaded', () => {
+            const detectedKey = detectOSKey();
+            updateDownloadUI(detectedKey, false);
+        });
+    </script>
+</body>
+
+</html>

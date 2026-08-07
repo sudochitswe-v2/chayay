@@ -38,3 +38,15 @@ Use these global keyboard shortcuts to speed up your workflow:
 | **`Ctrl + P`** | Export markdown to PDF |
 | **`F2`** | Rename selected workspace file/folder |
 | **`Delete`** | Delete selected workspace file/folder |
+
+---
+
+## 🌐 GitHub Pages Deployment Setup
+
+This repository includes full support for hosting on **GitHub Pages**:
+
+1. **Automatic GitHub Actions Workflow**: `.github/workflows/deploy.yml` automatically builds and deploys static assets to GitHub Pages on every push to `main` / `master`.
+2. **Jekyll Bypass Config**: `.nojekyll` is included to ensure all assets (`index.html`, `chayay.png`, `preview.png`) are served directly.
+3. **Enable GitHub Pages in Repository Settings**:
+   - Go to your GitHub repository **Settings** → **Pages**.
+   - Under **Build and deployment** → **Source**, select **GitHub Actions**.
