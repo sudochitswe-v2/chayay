@@ -6,7 +6,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>ChaYay (ချရေး) - Fluent Markdown & Text Editor</title>
     <meta name="description"
-        content="ChaYay (ချရေး) - A lightweight, cross-platform Markdown & text editor built with Flutter and Microsoft Fluent Design. Fast, responsive, and distraction-free across Windows, Linux, and macOS.">
+        content="ChaYay (ချရေး) - A lightweight, cross-platform Markdown & text editor built with Flutter and Microsoft Fluent Design. Fast, responsive, and distraction-free across Windows and Linux.">
     <link rel="icon" type="image/png" href="chayay.png">
     <link rel="apple-touch-icon" href="chayay.png">
 
@@ -195,8 +195,7 @@
                 <!-- Subheading -->
                 <p class="text-lg sm:text-xl text-gray-300 max-w-2xl mx-auto font-normal leading-relaxed">
                     <strong class="text-white">ChaYay (ချရေး)</strong> is a lightweight, cross-platform Markdown & text
-                    editor designed with Microsoft's Fluent UI system. Built natively with Flutter to deliver fast,
-                    distraction-free writing on Windows, Linux, and macOS.
+                    editor built natively with Flutter to deliver fast, distraction-free writing on Windows and Linux.
                 </p>
 
                 <!-- Smart Download Button & Dropdown Switcher -->
@@ -264,19 +263,6 @@
                                         <div class="text-xs text-gray-400">Standalone AppImage</div>
                                     </div>
                                 </button>
-
-                                <button onclick="selectPlatform('mac')"
-                                    class="w-full flex items-center gap-3 px-3 py-2.5 rounded-lg hover:bg-blue-600/20 text-sm text-gray-200 hover:text-white transition-colors text-left">
-                                    <svg class="w-4 h-4 text-purple-400 flex-shrink-0" fill="currentColor"
-                                        viewBox="0 0 24 24">
-                                        <path
-                                            d="M18.71 19.5c-.83 1.24-1.71 2.45-3.05 2.47-1.34.03-1.77-.79-3.29-.79-1.53 0-2 .77-3.27.82-1.31.05-2.3-1.32-3.14-2.53C4.25 17 2.94 12.45 4.7 9.39c.87-1.52 2.43-2.48 4.12-2.51 1.28-.02 2.5.87 3.29.87.78 0 2.26-1.07 3.81-.91.65.03 2.47.26 3.64 1.98-.09.06-2.17 1.28-2.15 3.81.03 3.02 2.65 4.03 2.68 4.04-.03.07-.42 1.44-1.38 2.83M15.97 4.31c.64-.78 1.08-1.85.96-2.93-.93.04-2.09.62-2.75 1.4-.59.68-1.1 1.77-.96 2.84 1.04.08 2.12-.53 2.75-1.31z" />
-                                    </svg>
-                                    <div>
-                                        <div class="font-medium">macOS</div>
-                                        <div class="text-xs text-gray-400">GitHub Release Assets</div>
-                                    </div>
-                                </button>
                             </div>
                         </div>
                     </div>
@@ -299,8 +285,7 @@
         <section id="preview" class="py-12 px-6 max-w-7xl mx-auto">
             <div class="text-center space-y-3 mb-10">
                 <h2 class="text-3xl font-bold text-white tracking-tight">Experience Fluent Design</h2>
-                <p class="text-gray-400 max-w-xl mx-auto">Explore ChaYay's crisp typography, dark mode acrylic
-                    interface, and distraction-free writing environment.</p>
+                <p class="text-gray-400 max-w-xl mx-auto">Explore ChaYay's crisp typography, dark mode interface, and distraction-free writing environment.</p>
             </div>
 
             <!-- Single Preview Image Container -->
@@ -329,109 +314,81 @@
             </div>
         </section>
 
-        <!-- Features Grid Section -->
-        <section id="features" class="py-16 px-6 max-w-7xl mx-auto">
-            <div class="text-center space-y-3 mb-14">
+        <!-- Features List Section -->
+        <section id="features" class="py-16 px-6 max-w-4xl mx-auto">
+            <div class="text-center space-y-3 mb-10">
                 <h2 class="text-3xl font-bold text-white tracking-tight">Built for Writers & Developers</h2>
                 <p class="text-gray-400 max-w-2xl mx-auto">Everything you need for seamless text editing without the
                     memory overhead of web browsers disguised as desktop apps.</p>
             </div>
 
-            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+            <div class="mica-card rounded-2xl p-6 sm:p-8 border border-white/10 shadow-fluent space-y-4">
                 <!-- Feature 1 -->
-                <div class="mica-card mica-card-interactive p-6 rounded-2xl">
-                    <div
-                        class="w-12 h-12 rounded-xl bg-blue-500/10 border border-blue-500/20 text-blue-400 flex items-center justify-center mb-5">
-                        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <div class="flex flex-col sm:flex-row sm:items-start gap-4 p-4 rounded-xl bg-white/[0.03] hover:bg-white/[0.06] border border-white/5 transition-all">
+                    <div class="w-11 h-11 rounded-xl bg-blue-500/10 border border-blue-500/20 text-blue-400 flex items-center justify-center flex-shrink-0">
+                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                                 d="M13 10V3L4 14h7v7l9-11h-7z" />
                         </svg>
                     </div>
-                    <h3 class="text-lg font-bold text-white mb-2">Native Desktop Speed</h3>
-                    <p class="text-sm text-gray-300 leading-relaxed">
-                        Compiled natively with Flutter C++ desktop runner. Launches in under a second with minimal RAM
-                        consumption compared to Electron.
-                    </p>
+                    <div>
+                        <h3 class="text-base font-bold text-white mb-1">Native Desktop Speed</h3>
+                        <p class="text-sm text-gray-300 leading-relaxed">
+                            Compiled natively with Flutter C++ desktop runner. Launches in under a second with minimal RAM
+                            consumption compared to Electron.
+                        </p>
+                    </div>
                 </div>
 
                 <!-- Feature 2 -->
-                <div class="mica-card mica-card-interactive p-6 rounded-2xl">
-                    <div
-                        class="w-12 h-12 rounded-xl bg-sky-500/10 border border-sky-500/20 text-sky-400 flex items-center justify-center mb-5">
-                        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                d="M7 21a4 4 0 01-4-4V5a2 2 0 012-2h4a2 2 0 012 2v12a4 4 0 01-4 4zm0 0h12a2 2 0 002-2v-4a2 2 0 00-2-2h-2.343M11 7.343l1.657-1.657a2 2 0 012.828 0l2.829 2.829a2 2 0 010 2.828l-8.486 8.485M7 17h.01" />
-                        </svg>
-                    </div>
-                    <h3 class="text-lg font-bold text-white mb-2">Fluent UI & Acrylic Design</h3>
-                    <p class="text-sm text-gray-300 leading-relaxed">
-                        Designed adhering to Microsoft Fluent UI guidelines. Features dark mode, translucent Mica
-                        backgrounds, and clean control elements.
-                    </p>
-                </div>
-
-                <!-- Feature 3 -->
-                <div class="mica-card mica-card-interactive p-6 rounded-2xl">
-                    <div
-                        class="w-12 h-12 rounded-xl bg-indigo-500/10 border border-indigo-500/20 text-indigo-400 flex items-center justify-center mb-5">
-                        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <div class="flex flex-col sm:flex-row sm:items-start gap-4 p-4 rounded-xl bg-white/[0.03] hover:bg-white/[0.06] border border-white/5 transition-all">
+                    <div class="w-11 h-11 rounded-xl bg-indigo-500/10 border border-indigo-500/20 text-indigo-400 flex items-center justify-center flex-shrink-0">
+                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                                 d="M7 21h10a2 2 0 002-2V9.414a1 1 0 00-.293-.707l-5.414-5.414A1 1 0 0012.586 3H7a2 2 0 00-2 2v14a2 2 0 002 2z" />
                         </svg>
                     </div>
-                    <h3 class="text-lg font-bold text-white mb-2">PDF Export & Script Shaping</h3>
-                    <p class="text-sm text-gray-300 leading-relaxed">
-                        Export Markdown notes to clean PDF documents with precise typography formatting, including
-                        complex script shaping (HarfBuzz-backed Myanmar rendering).
-                    </p>
-                </div>
-
-                <!-- Feature 4 -->
-                <div class="mica-card mica-card-interactive p-6 rounded-2xl">
-                    <div
-                        class="w-12 h-12 rounded-xl bg-purple-500/10 border border-purple-500/20 text-purple-400 flex items-center justify-center mb-5">
-                        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                d="M3 7v10a2 2 0 002 2h14a2 2 0 002-2V9a2 2 0 00-2-2h-6l-2-2H5a2 2 0 00-2 2z" />
-                        </svg>
+                    <div>
+                        <h3 class="text-base font-bold text-white mb-1">PDF Export & Script Shaping</h3>
+                        <p class="text-sm text-gray-300 leading-relaxed">
+                            Export Markdown notes to clean PDF documents with precise typography formatting, including
+                            complex script shaping (HarfBuzz-backed Myanmar rendering).
+                        </p>
                     </div>
-                    <h3 class="text-lg font-bold text-white mb-2">Natural File Explorer</h3>
-                    <p class="text-sm text-gray-300 leading-relaxed">
-                        Built-in sidebar file workspace with natural numerical sorting algorithm, inline renaming
-                        (`F2`), and context menu file operations.
-                    </p>
                 </div>
 
-                <!-- Feature 5 -->
-                <div class="mica-card mica-card-interactive p-6 rounded-2xl">
-                    <div
-                        class="w-12 h-12 rounded-xl bg-emerald-500/10 border border-emerald-500/20 text-emerald-400 flex items-center justify-center mb-5">
-                        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <!-- Feature 3 -->
+                <div class="flex flex-col sm:flex-row sm:items-start gap-4 p-4 rounded-xl bg-white/[0.03] hover:bg-white/[0.06] border border-white/5 transition-all">
+                    <div class="w-11 h-11 rounded-xl bg-emerald-500/10 border border-emerald-500/20 text-emerald-400 flex items-center justify-center flex-shrink-0">
+                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                                 d="M9.75 17L9 20l-1 1h8l-1-1-.75-3M3 13h18M5 17h14a2 2 0 002-2V5a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
                         </svg>
                     </div>
-                    <h3 class="text-lg font-bold text-white mb-2">Cross-Platform Ready</h3>
-                    <p class="text-sm text-gray-300 leading-relaxed">
-                        Optimized for Windows 10/11 with active development for Linux desktop (KDE/GNOME) and native
-                        menubar bridges.
-                    </p>
+                    <div>
+                        <h3 class="text-base font-bold text-white mb-1">Cross-Platform Ready</h3>
+                        <p class="text-sm text-gray-300 leading-relaxed">
+                            Optimized for Windows 10/11 with active development for Linux desktop (KDE/GNOME) and native
+                            menubar bridges.
+                        </p>
+                    </div>
                 </div>
 
-                <!-- Feature 6 -->
-                <div class="mica-card mica-card-interactive p-6 rounded-2xl">
-                    <div
-                        class="w-12 h-12 rounded-xl bg-amber-500/10 border border-amber-500/20 text-amber-400 flex items-center justify-center mb-5">
-                        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <!-- Feature 4 -->
+                <div class="flex flex-col sm:flex-row sm:items-start gap-4 p-4 rounded-xl bg-white/[0.03] hover:bg-white/[0.06] border border-white/5 transition-all">
+                    <div class="w-11 h-11 rounded-xl bg-amber-500/10 border border-amber-500/20 text-amber-400 flex items-center justify-center flex-shrink-0">
+                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                                 d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z" />
                         </svg>
                     </div>
-                    <h3 class="text-lg font-bold text-white mb-2">Private & Local-First</h3>
-                    <p class="text-sm text-gray-300 leading-relaxed">
-                        Your files stay entirely on your local hard drive. Zero telemetry, zero cloud lock-in, and
-                        instant opening of local text files.
-                    </p>
+                    <div>
+                        <h3 class="text-base font-bold text-white mb-1">Private & Local-First</h3>
+                        <p class="text-sm text-gray-300 leading-relaxed">
+                            Your files stay entirely on your local hard drive. Zero telemetry, zero cloud lock-in, and
+                            instant opening of local text files.
+                        </p>
+                    </div>
                 </div>
             </div>
         </section>
@@ -535,15 +492,6 @@
                 url: 'https://github.com/sudochitswe-v2/chayay/releases/download/0.2.6/ChaYay-x86_64-Linux.AppImage',
                 requirements: 'Ubuntu 20.04+, Fedora, Arch Linux',
                 icon: `<svg class="w-6 h-6" fill="currentColor" viewBox="0 0 24 24"><path d="M12.001 2C6.476 2 2 6.477 2 12c0 4.418 2.865 8.166 6.839 9.489.5.092.682-.217.682-.482 0-.237-.008-.866-.013-1.7-2.782.603-3.369-1.34-3.369-1.34-.454-1.156-1.11-1.464-1.11-1.464-.908-.62.069-.608.069-.608 1.003.07 1.53 1.03 1.53 1.03.892 1.529 2.341 1.087 2.91.831.092-.646.35-1.086.636-1.336-2.22-.253-4.555-1.11-4.555-4.943 0-1.091.39-1.984 1.029-2.683-.103-.253-.446-1.27.098-2.647 0 0 .84-.269 2.75 1.025A9.578 9.578 0 0112 6.836c.85.004 1.705.114 2.504.336 1.909-1.294 2.747-1.025 2.747-1.025.546 1.377.203 2.394.1 2.647.64.699 1.028 1.592 1.028 2.683 0 3.842-2.339 4.687-4.566 4.935.359.309.678.919.678 1.852 0 1.336-.012 2.415-.012 2.743 0 .267.18.578.688.48C19.138 20.163 22 16.418 22 12c0-5.523-4.477-10-9.999-10z"/></svg>`
-            },
-            mac: {
-                id: 'mac',
-                name: 'macOS',
-                label: 'View All GitHub Releases',
-                subtext: 'v0.2.6 • Release Assets',
-                url: 'https://github.com/sudochitswe-v2/chayay/releases/tag/0.2.6',
-                requirements: 'macOS 11.0 Big Sur or newer',
-                icon: `<svg class="w-6 h-6" fill="currentColor" viewBox="0 0 24 24"><path d="M18.71 19.5c-.83 1.24-1.71 2.45-3.05 2.47-1.34.03-1.77-.79-3.29-.79-1.53 0-2 .77-3.27.82-1.31.05-2.3-1.32-3.14-2.53C4.25 17 2.94 12.45 4.7 9.39c.87-1.52 2.43-2.48 4.12-2.51 1.28-.02 2.5.87 3.29.87.78 0 2.26-1.07 3.81-.91.65.03 2.47.26 3.64 1.98-.09.06-2.17 1.28-2.15 3.81.03 3.02 2.65 4.03 2.68 4.04-.03.07-.42 1.44-1.38 2.83M15.97 4.31c.64-.78 1.08-1.85.96-2.93-.93.04-2.09.62-2.75 1.4-.59.68-1.1 1.77-.96 2.84 1.04.08 2.12-.53 2.75-1.31z"/></svg>`
             }
         };
 
@@ -552,7 +500,6 @@
             const platform = (window.navigator.platform || '').toLowerCase();
             if (platform.includes('win') || userAgent.includes('windows')) return 'windows';
             if (platform.includes('linux') || userAgent.includes('linux') || userAgent.includes('x11')) return 'linux';
-            if (platform.includes('mac') || userAgent.includes('macintosh') || userAgent.includes('mac os')) return 'mac';
             return 'windows';
         }
 
